@@ -1,0 +1,158 @@
+<!-- <template>
+    <div class="container">
+        <lightning-card title="Serminar List" icon-name="standard:event">
+            <div class="slds-p-horizontal_small">
+                <lightning-input
+                    label="Search"
+                    value={searchText}
+                    onchange={handleSearchChange}
+                    onkeypress={handleKeyPress}
+                ></lightning-input>
+                <lightning-combobox
+                    label="Sort By"
+                    value={sortBy}
+                    options={sortOptions}
+                    onchange={handleSortChange}
+                ></lightning-combobox>
+                <lightning-combobox
+                    label="Sort Direction"
+                    value={sortDirection}
+                    options={sortDirectionOptions}
+                    onchange={handleSortDirectionChange}
+                ></lightning-combobox>
+                <lightning-button label="Search" onclick={handleSearchClick}></lightning-button>
+            </div>
+            <template if:true={serminarList}>
+                <lightning-datatable
+                    key-field="Id"
+                    data={serminarList}
+                    columns={tableColumns}
+                    sorted-by={sortBy}
+                    sorted-direction={sortDirection}
+                    onsort={handleSort}
+                ></lightning-datatable>
+            </template>
+            <template if:true={error}>
+                <p class="slds-text-color_error">An error occurred while fetching the Serminar data.</p>
+            </template>
+        </lightning-card>
+    </div>
+</template> -->
+
+
+<template>
+    <lightning-card class="slds-scope">
+        <div class="slds-p-around_medium lgc-bg">
+            <lightning-input class="slds-align_absolute-center" type="text" placeholder="Search..." value={searchInput} onchange={handleSearch} onkeypress={handleKeyPress}></lightning-input>
+        </div>
+        <div class="slds-align_absolute-center">
+            <lightning-button variant="brand" label="Search" title="Search" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+        </div> 
+        <div class="slds-clearfix sslds-p-right_large">
+            <div class="slds-float_right">            
+              <div class="container">
+                <table style="width:100%; padding-bottom: 50px">
+                    <tbody>
+                        <tr>
+                            <td class="slds-p-around_x-small">
+                                <legend class="slds-form-element__legend slds-form-element__label">Sort</legend>
+                            </td>
+                            <td>
+                                <fieldset class="slds-form-element">
+                                <div class="slds-form-element__control">
+                                    <table>
+                                    <tbody>
+                                    <tr>
+                                    <td>
+                                    <span class="slds-radio">
+                                    <input type="radio" id="radio-61"  value="ASC"
+                                    options={sortDirectionOptionAsc} name="default" checked onchange={handleSortDirection}/>
+                                    <label class="slds-radio__label" for="radio-61">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">ASC</span>
+                                    </label>
+                                    </span>
+                                    </td>
+                                    <td>
+                                    <span class="slds-radio">
+                                    <input type="radio" id="radio-62"  value="DESC"
+                                    options={sortDirectionOptionDesc} name="default" unchecked onchange={handleSortDirection}/>
+                                    <label class="slds-radio__label" for="radio-62">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">DESC</span>
+                                    </label>
+                                    </span>
+                                    </td>
+                                    </tr>
+                                    </tbody>
+                                    </table>
+                                </div>
+                                </fieldset>
+                            </td>
+                            <td class="slds-p-right_large">
+                                <lightning-combobox style="width: fit-content"
+                                name="progress"
+                                value={sortBy}
+                                options={sortOptions}
+                                onchange={handleSortBy} 
+                                variant="label-hidden">
+                                </lightning-combobox>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>   
+        <div class="slds-p-around_x-small">
+        <template if:true={sortedSerminars}>
+            <lightning-layout multiple-rows="true">
+                <template for:each={sortedSerminars} for:item="serminar" for:index="index">
+                    <lightning-layout-item key={serminar.Id} size="12" class="slds-p-around_large">
+                        <div class="slds-grid slds-gutters" style=" border: 0.75px solid; border-radius: 0; padding-left: 0 0 0 0;">
+                            <div class="slds-size_3-of-12" style="border-style: none">
+                                <img src={serminar.Image__c} style="height: 100%; object-fit: cover;"/>
+                            </div>
+                        <div class="slds-col slds-size_9-of-12 slds-p-right_medium" style="padding-left: 0;">
+                        <div class="slds-section slds-is-open slds-p-left_large">
+                            <div class="slds-section__title ">
+                            <span class="slds-truncate slds-p-bottom_x-large" style="font-weight: bold; font-size: 26px;" title={serminar.Name}>{serminar.Name}</span>
+                            </div>
+                            <div class="slds-p-bottom_x-large">  
+                            <lightning-formatted-rich-text
+                                value={serminar.Description__c}
+                            ></lightning-formatted-rich-text>
+                            </div>  
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-col slds-size_2-of-3">
+                                    <div class="slds-text-link slds-align_absolute-center" style="color: black;">Detail</div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3">
+                                    <div class="slds-clearfix">
+                                    <b style="text-align: right; font-weight: 1.5px" class="slds-float_right">
+                                    <lightning-formatted-number value={serminar.Price__c} format-style="decimal" style="text-align: right;"></lightning-formatted-number>
+                                    <template if:true={serminar.Price__c}>
+                                    <span>đ</span>
+                                    </template>
+                                    </b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        </div>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+        </template>
+        <template if:true={error}>
+            <div class="slds-text-color_error">
+                An error occurred while loading the serminar list
+            </div>
+        </template>
+        </div>
+    </lightning-card>
+</template>
+
+
+
